@@ -6,7 +6,9 @@ const app = express();
 
 app.use(express.json());
 app.use(rateLimit);
-
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger'); //swagger file
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // routes
 app.use('/auth', require('./src/routes/auth.routes'));
 app.use('/records', require('./src/routes/record.routes'));
