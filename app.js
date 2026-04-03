@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const rateLimit = require('./middleware/rateLimit');
+const rateLimit = require('./src/middleware/rateLimit');
 
 const app = express();
 
@@ -8,12 +8,12 @@ app.use(express.json());
 app.use(rateLimit);
 
 // routes
-app.use('/auth', require('./routes/auth.routes'));
-app.use('/records', require('./routes/record.routes'));
-app.use('/dashboard', require('./routes/dashboard.routes'));
-app.use('/budget', require('./routes/budget.routes'));
+app.use('/auth', require('./src/routes/auth.routes'));
+app.use('/records', require('./src/routes/record.routes'));
+app.use('/dashboard', require('./src/routes/dashboard.routes'));
+app.use('/budget', require('./src/routes/budget.routes'));
 
-// logger 
+// logger
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);
   next();
@@ -29,4 +29,4 @@ app.use((err, req, res, next) => {
 app.get('/', (req, res) => {
   res.send("API Running");
 });
-module.exports = app; 
+module.exports = app;
