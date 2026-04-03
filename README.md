@@ -20,7 +20,7 @@ npm install
 
 ```
 JWT_SECRET=your_secret_key
-DATABASE_URL="file:./dev.db"
+DATABASE_URL="file:./prisma/dev.db"
 ```
 
 3. Setup database
