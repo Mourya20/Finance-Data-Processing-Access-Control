@@ -1,115 +1,148 @@
-Finance-Data-Processing-Access-Control-Backend
-Overview
+Finance Data Processing & Access Control Backend
 
-This project is a backend system for a finance dashboard that manages financial records and provides analytics using role-based access control (RBAC).
+A secure, high-performance backend system for a financial dashboard. This project manages financial records and provides advanced analytics through a robust Role-Based Access Control (RBAC) system.
 
-It is designed to demonstrate clean backend architecture, secure access control, and meaningful financial insights beyond basic CRUD operations. The system simulates real-world financial platforms where different user roles interact with data based on permissions.
+It is designed to demonstrate clean backend architecture, secure data processing, and meaningful financial insights beyond basic CRUD operations.
 
-Deployment
-
-The backend is deployed using Render.
-
-The project was connected to GitHub and deployed on Render, where the build and start processes are handled automatically.
-
-Live API Base URL:
+🚀 Live Links
+Live API Base URL
 https://finance-data-processing-access-control-lxp4.onrender.com
-
-Swagger Documentation (Live):
+Swagger API Docs (Live)
 https://finance-data-processing-access-control-lxp4.onrender.com/api-docs
-
-Swagger API Documentation & Testing
-
-Swagger UI is integrated into the application using swagger-ui-express and swagger-jsdoc.
-
-All APIs are exposed through the Swagger interface. After deployment, the APIs were tested directly from the Swagger UI by:
-
-Opening the /api-docs route
-Using the "Try it out" feature
-Providing request body inputs
-Using JWT authentication via the Authorize button
-
-Authentication was tested by first calling /auth/login, copying the token, and then using it in Swagger to access protected routes such as /records, /dashboard, and /budget.
-
-This allowed verification of:
-
-Correct responses
-Status codes (200, 201, 401, 403, etc.)
-Role-based access restrictions
-Data correctness
-Linux Deployment Adjustments (Important)
-
-Since the project was developed locally on Windows and deployed on a Linux-based environment (Render), a few changes were required:
-
-Updated Prisma configuration to support Linux runtime:
-
-binaryTargets = ["native", "debian-openssl-3.0.x"]
-
-Ensured Prisma client is generated during deployment using:
-
-prisma generate
-Fixed path issues related to schema location
-Replaced direct CLI usage with compatible commands when needed
-Ensured environment variables are correctly loaded in production
-
-These changes ensured the backend runs properly in a Linux environment without runtime errors.
-
-Setup Steps (Local)
-Install dependencies
-npm install
-Create .env file
-JWT_SECRET=your_secret_key
-DATABASE_URL="file:./prisma/dev.db"
-Setup database
-npx prisma generate
-npx prisma migrate dev
-Start server
-npm start
-
-Server runs at: http://localhost:3000
-
-Run tests (optional)
-npm test
-
-Swagger Docs (local):
-http://localhost:3000/api-docs
-
-Key Features
-Authentication & Authorization
-JWT-based authentication
-Role-based access control (RBAC)
-Financial Records
-Create, Read, Update, Delete operations
-Fields: amount, type, category, date, notes
+🛠 Tech Stack
+Backend: Node.js, Express.js
+Database: SQLite
+ORM: Prisma
+Authentication: JWT (JSON Web Tokens)
+Testing: Jest, Supertest
+Documentation: Swagger UI (swagger-ui-express, swagger-jsdoc)
+Deployment: Render (Linux Environment)
+🔑 Key Features
+1. Authentication & Authorization
+JWT-based secure authentication
+Role-Based Access Control (RBAC)
+Rate limiting for API protection
+2. Financial Management
+Full CRUD operations
+Fields:
+amount
+type (Income / Expense)
+category
+date
+notes
 Pagination, filtering, and search support
-Financial Analytics
-Summary: total income, expense, net balance
-Monthly, Quarterly, Yearly analytics
-Includes:
-Income
-Expense
+3. Financial Analytics & Insights
+Summary:
+Total income
+Total expenses
+Net balance
+Time-based analytics:
+Monthly
+Quarterly
+Yearly
+Advanced metrics:
 EBITDA
-PAT
-Insights
-Category-wise expense breakdown
-Sorted by highest spending
-Budget Tracking
-Set category budgets
-Compare spending vs limits
-Additional Enhancements
+PAT (Profit After Tax)
+Category-wise expense breakdown (sorted by highest spending)
+4. Budget Tracking
+Set category-specific budgets
+Compare actual spending vs limits
+5. Additional Enhancements
 Soft delete support
 Rate limiting
 Swagger API documentation
-Unit and integration testing
-API Endpoints
-Auth
+Unit & integration testing
+👥 Roles Explanation
+Role	Permissions
+Admin	Full access, manage users, full CRUD
+Analyst	View records + access analytics
+Viewer	View dashboard only (no raw records)
+📂 Project Structure
+│
+├── src/
+│   ├── controllers/        # Handles request & response logic
+│   │
+│   ├── routes/             # Defines API endpoints
+│   │
+│   ├── services/           # Business logic & Prisma queries
+│   │
+│   ├── middleware/         # Auth, RBAC, Rate Limiting, Error handling
+│   │
+│   ├── utils/              # Prisma client, JWT helpers, constants
+│   │
+│   └── config/             # Swagger config & environment setup
+│
+├── prisma/
+│   ├── schema.prisma       # Database schema
+│   └── migrations/         # Prisma migrations
+│
+├── tests/                  # Jest + Supertest (unit & integration tests)
+│
+├── app.js                  # Express app configuration
+├── server.js               # Server entry point
+│
+├── .env                    # Environment variables
+├── package.json
+├── package-lock.json
+│
+└── README.md               # Project documentation
+⚙️ Local Setup
+1. Install Dependencies
+npm install
+2. Configure Environment
+
+Create .env file:
+
+JWT_SECRET=your_secret_key
+DATABASE_URL="file:./prisma/dev.db"
+3. Setup Database
+npx prisma generate
+npx prisma migrate dev
+4. Run Server
+npm start
+Local URL: http://localhost:3000
+Swagger Docs: http://localhost:3000/api-docs
+🧪 Run Tests (Optional)
+npm test
+🐧 Linux Deployment (Render)
+
+Since the project was developed on Windows and deployed on Linux, the following fixes were applied:
+
+Prisma Configuration
+binaryTargets = ["native", "debian-openssl-3.0.x"]
+Deployment Fixes
+Ensured prisma generate runs during build
+Fixed schema path issues
+Resolved case-sensitivity problems
+Adjusted CLI commands for Linux
+Proper environment variable loading
+📖 Swagger API Testing
+
+Swagger UI is integrated for interactive API testing:
+
+Open /api-docs
+Use "Try it out"
+Provide request payloads
+Use Authorize button (JWT)
+Testing Flow
+Call /auth/login
+Copy JWT token
+Authorize in Swagger
+Access protected routes
+Verified:
+Status codes (200, 201, 401, 403)
+RBAC restrictions
+Data correctness
+📌 API Endpoints
+🔐 Auth
 POST /auth/register
 POST /auth/login
-Records
-POST /records
+📁 Records
 GET /records
+POST /records (Admin)
 PUT /records/:id
 DELETE /records/:id
-Dashboard
+📊 Dashboard & Analytics
 GET /dashboard/summary
 GET /dashboard/recent
 GET /dashboard/category
@@ -117,69 +150,44 @@ GET /dashboard/finance/monthly
 GET /dashboard/finance/quarterly
 GET /dashboard/finance/yearly
 GET /dashboard/category-breakdown
-Budget
+💰 Budget
 POST /budget
 GET /budget/check
-Roles Explanation
-Admin
-Full access to system
-Can create, update, delete records
-Can manage users
-Analyst
-Can view records
-Can access analytics
-Viewer
-Can only view dashboard data
-Cannot modify records
-Tech Stack
-Node.js with Express
-Prisma ORM
-SQLite
-JWT Authentication
-Jest and Supertest
-Swagger
-Project Structure
-zorovyn/
-│
-├── src/
-│   ├── controllers/        # Route handlers
-│   ├── routes/             # API routes
-│   ├── services/           # Business logic (Prisma queries)
-│   ├── middleware/         # Auth, RBAC, rate limiting
-│   └── utils/              # Prisma client, JWT helpers
-│
-├── prisma/
-│   ├── schema.prisma       # Database schema
-│   └── migrations/         # Prisma migrations
-│
-├── tests/                  # Jest + Supertest
-│
-├── app.js                  # Express app setup
-├── server.js               # Entry point
-├── package.json
-├── .env
-└── README.md
-Design Notes
-RBAC implemented using middleware for simplicity
-Prisma used for structured database interaction
-Raw SQL used for time-based analytics
+📝 Design Notes
+RBAC implemented via middleware
+Prisma used for structured DB access
+Raw SQL used for efficient analytics queries
 APIs grouped into summary, analytics, and insights
-Assumptions
-Tax is simplified as 10% of profit
+⚖️ Assumptions
+Tax = 10% of profit (simplified)
 All expenses treated as operating expenses
 SQLite used for simplicity
-Tradeoffs Considered
-SQLite chosen for simplicity instead of scalable databases
-Financial calculations simplified instead of full accounting models
-Raw SQL used for performance but reduces portability
-Middleware-based RBAC instead of advanced policy engines
-Limited test coverage focusing on core functionality
-Additional Notes
-Swagger is integrated directly inside the application (no separate config file initially)
-APIs were tested manually using Swagger after deployment
-Some debugging involved handling JSON formatting issues and JWT headers
-Prisma errors were handled explicitly (e.g., record not found cases)
-Deployment required environment-specific fixes (especially for Prisma)
-Conclusion
+⚖️ Trade-offs
+SQLite over scalable DBs
+→ Simple setup, not ideal for production scale
+Simplified financial calculations
+→ Focus on backend logic over accounting accuracy
+Raw SQL for analytics
+→ Better performance, less portability
+Middleware RBAC
+→ Simpler than policy engines, less flexible
+Limited test coverage
+→ Focused on core functionality
+📌 Additional Notes
+Swagger integrated directly (no separate config initially)
+APIs tested manually via Swagger
+Debugging handled:
+JSON formatting issues
+JWT headers
+Prisma errors (e.g., record not found)
+Deployment required environment-specific fixes
+✅ Conclusion
 
-This project demonstrates backend architecture, financial data processing, and role-based access control with practical deployment and API testing. It goes beyond basic CRUD operations by including analytics, validation, and structured API design.
+This project demonstrates:
+
+Clean backend architecture
+Secure role-based access control
+Financial data processing & analytics
+Real-world deployment handling (Linux compatibility)
+
+It goes beyond basic CRUD by incorporating analytics, validation, structured APIs, and production-like considerations.
