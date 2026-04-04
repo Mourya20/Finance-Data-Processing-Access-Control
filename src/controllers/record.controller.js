@@ -28,7 +28,7 @@ exports.create = async (req, res) => {
     const record = await service.createRecord({
       ...req.body,
       userId: req.user.id,
-      date: date ? new Date(date) : new Date()
+      createdAt: date ? new Date(date) : new Date()
     });
 
     res.status(201).json({ success: true, data: record });
