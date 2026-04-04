@@ -62,16 +62,66 @@ exports.getAll = async (req, res) => {
   }
 };
 exports.update = async (req, res) => {
-  const id = Number(req.params.id);
-  const record = await prisma.record.update({
-    where: { id },
-    data: req.body
-  });
-  res.json({ success: true, data: record });
+  try {
+    const id = Number(req.params.id);
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        error: "Invalid ID"
+      });
+    }
+
+    const data = await prisma.record.update({
+      where: { id },
+      data: {
+        ...req.body,
+        ...(req.body.date && { date: new Date(req.body.date) })
+      }
+    });
+
+    res.json({ success: true, data });
+
+  } catch (err) {
+    console.error("UPDATE ERROR:", err);
+
+    if (err.code === 'P2025') {
+      return res.status(404).json({
+        success: false,
+        error: "Record not found"
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      error: "Failed to update record"
+    });
+  }
 };
 
 exports.remove = async (req, res) => {
-  const id = Number(req.params.id);
-  await prisma.record.delete({ where: { id } });
-  res.json({ success: true, data: { message: "Deleted" } });
+  try {
+    const id = Number(req.params.id);
+
+    const data = await prisma.record.delete({
+      where: { id }
+    });
+
+    res.json({ success: true, data });
+
+  } catch (err) {
+    console.error("DELETE ERROR:", err);
+
+    if (err.code === 'P2025') {
+      return res.status(404).json({
+        success: false,
+        error: "Record not found"
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      error: "Failed to delete record"
+    });
+  }
 };
