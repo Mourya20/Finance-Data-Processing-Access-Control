@@ -1,7 +1,5 @@
 ## Finance Data Processing & Access Control Backend
-
-A secure and scalable backend for a financial dashboard.
-It manages records, analytics, and role-based access control.
+A secure, high-performance backend system for a financial dashboard. This project manages financial records and provides advanced analytics through a robust Role-Based Access Control (RBAC) system. It is designed to demonstrate clean architecture, secure data processing, and meaningful financial insights beyond basic CRUD operations.
 
 ## Live Application
 
@@ -92,23 +90,30 @@ It manages records, analytics, and role-based access control.
 
 ## Project Structure
 
-- src/
-  - controllers/        # Request/response logic
-  - routes/             # API routes
-  - services/           # Business logic (Prisma)
-  - middleware/         # Auth, RBAC, rate limiting, errors
-  - utils/              # Prisma client, JWT helpers
-  - config/             # Swagger and environment config
-- prisma/
-  - schema.prisma
-  - migrations/
-- tests/
-- app.js
-- server.js
-- .env
-- package.json
-- package-lock.json
-- README.md
+│
+├── node_modules
+├── src/
+│   ├── controllers/        # Request/response logic
+│   ├── routes/             # API routes
+│   ├── services/           # Business logic (Prisma)
+│   ├── middleware/         # Auth, RBAC, rate limiting, errors
+│   ├── utils/              # Prisma client, JWT helpers
+│   └── config/             # Swagger & environment config
+│
+├── prisma/
+│   ├── schema.prisma       # Database schema definition
+│   └── migrations/         # Version-controlled database migrations
+│
+├── tests/                  # Unit and integration tests
+│
+├── app.js                  # Express application configuration
+├── server.js               # Application entry point
+|
+├── .env                    # Environment variables
+├── package.json
+├── package-lock.json
+├──API_Documentation.md
+└── README.md
 
 ## Local Setup Instructions
 
