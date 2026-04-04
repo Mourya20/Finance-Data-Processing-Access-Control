@@ -90,30 +90,27 @@ A secure, high-performance backend system for a financial dashboard. This projec
 
 ## Project Structure
 
-│
-├── node_modules
+```text
+.
 ├── src/
 │   ├── controllers/        # Request/response logic
 │   ├── routes/             # API routes
 │   ├── services/           # Business logic (Prisma)
 │   ├── middleware/         # Auth, RBAC, rate limiting, errors
 │   ├── utils/              # Prisma client, JWT helpers
-│   └── config/             # Swagger & environment config
-│
+│   └── config/             # Swagger and environment config
 ├── prisma/
 │   ├── schema.prisma       # Database schema definition
 │   └── migrations/         # Version-controlled database migrations
-│
 ├── tests/                  # Unit and integration tests
-│
 ├── app.js                  # Express application configuration
 ├── server.js               # Application entry point
-|
 ├── .env                    # Environment variables
 ├── package.json
 ├── package-lock.json
-├──API_Documentation.md
+├── API_Documentation.md
 └── README.md
+```
 
 ## Local Setup Instructions
 
