@@ -229,19 +229,44 @@ binaryTargets = ["native", "debian-openssl-3.0.x"]
 - All expenses are treated as operating expenses
 - SQLite is used for simplicity
 
-## Trade-offs
 
-- SQLite chosen for simplicity over scalability
-- Simplified financial calculations
-- Raw SQL improves performance but reduces portability
-- Middleware RBAC instead of advanced policy systems
-- Limited test coverage
+## Tradeoffs Considered
+
+**SQLite over scalable databases**
+
+- Chosen for simplicity and quick setup, but not suitable for large-scale production.
+
+**Simplified financial calculations**
+
+-Used basic assumptions (fixed tax rate) instead of full accounting models to keep focus on backend logic.
+
+**Raw SQL for analytics**
+
+- Improves performance for aggregations but reduces portability.
+
+**RBAC via middleware**
+
+-Simple and easy to implement, though less flexible than advanced policy systems.
+
+**Swagger configuration inside app.js**
+
+- Swagger was implemented directly in app.js instead of a separate config file to keep the setup simple and centralized during development. For larger projects, this can be modularized into a dedicated config folder.
+**Environment variables handling**
+
+- The .env file was used for local development and was initially committed to the repository. While this is not a best practice, .gitignore was later added to prevent further exposure. This was done to demonstrate awareness of environment variable management, though in a real production setup secrets would be fully excluded.
+
+**Limited test coverage**
+
+- Focused mainly on authentication and core functionality due to time constraints.
 
 ## Additional Notes
 
-- Swagger is integrated within the application
-- APIs are tested manually using Swagger
-- Debugging focused on JWT issues, JSON formatting, and Prisma errors
+- Environment variables are managed using a .env file. .gitignore is included to prevent sensitive data from being committed in future updates.
+- The backend is deployed on Render with adjustments for Linux compatibility (Prisma configuration and environment setup).
+- Swagger UI is integrated and used to test all APIs after deployment.
+- Key challenges handled during development include JWT authentication issues, Prisma runtime errors, request validation, and deployment debugging.
+
+
 
 ## Conclusion
 
