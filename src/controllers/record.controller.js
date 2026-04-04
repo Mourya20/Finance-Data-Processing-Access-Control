@@ -72,13 +72,14 @@ exports.update = async (req, res) => {
       });
     }
 
-    const data = await prisma.record.update({
-      where: { id },
-      data: {
-        ...req.body,
-        ...(req.body.date && { date: new Date(req.body.date) })
-      }
-    });
+    const updateData = { ...req.body };
+
+    if (req.body.date) {
+      updateData.createdAt = new Date(req.body.date);
+      delete updateData.date;
+    }
+
+    const data = await service.updateRecord(id, updateData);
 
     res.json({ success: true, data });
 
@@ -103,9 +104,14 @@ exports.remove = async (req, res) => {
   try {
     const id = Number(req.params.id);
 
-    const data = await prisma.record.delete({
-      where: { id }
-    });
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        error: "Invalid ID"
+      });
+    }
+
+    const data = await service.deleteRecord(id);
 
     res.json({ success: true, data });
 
