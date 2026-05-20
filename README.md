@@ -1,278 +1,362 @@
-## Finance Data Processing & Access Control Backend
-A secure, high-performance backend system for a financial dashboard. This project manages financial records and provides advanced analytics through a robust Role-Based Access Control (RBAC) system. It is designed to demonstrate clean architecture, secure data processing, and meaningful financial insights beyond basic CRUD operations.
+# Finance Data Processing & Access Control
+
+A full-stack financial dashboard with a secure, high-performance backend and a React frontend. The system manages financial records and delivers advanced analytics through a Role-Based Access Control (RBAC) architecture — demonstrating clean monorepo structure, secure data processing, and meaningful financial insights beyond basic CRUD.
+
+---
 
 ## Live Application
 
-- API Base URL: https://finance-data-processing-access-control-lxp4.onrender.com
-- Swagger API Documentation: https://finance-data-processing-access-control-lxp4.onrender.com/api-docs
+| Service | URL |
+|---|---|
+| API Base URL | https://finance-data-processing-access-control-lxp4.onrender.com |
+| Swagger API Docs | https://finance-data-processing-access-control-lxp4.onrender.com/api-docs |
+
+---
 
 ## Technology Stack
 
-- Backend: Node.js with Express.js
-- Database: SQLite
-- ORM: Prisma
-- Authentication: JWT (JSON Web Tokens)
-- API Documentation: Swagger UI
-- Testing: Jest and Supertest
-- Deployment: Render (Linux)
+### Backend
+- **Runtime:** Node.js with Express.js
+- **Database:** SQLite
+- **ORM:** Prisma (with raw SQL for analytics)
+- **Auth:** JWT (JSON Web Tokens) + bcrypt
+- **API Docs:** Swagger UI (swagger-jsdoc + swagger-ui-express)
+- **Rate Limiting:** express-rate-limit
+- **Testing:** Jest + Supertest
+- **Deployment:** Render (Linux, debian-openssl-3.0.x)
 
-## Core Features
+### Frontend
+- **Framework:** React 18 with Vite
+- **Routing:** React Router DOM v6
+- **Architecture:** MVC-inspired (controllers, services, models, pages)
 
-- Authentication and Authorization
-- Financial record management
-- Financial analytics and dashboards
-- Role-based access control
-- Rate limiting and security
-
-## Authentication and Authorization
-
-- JWT-based secure authentication
-- Role-Based Access Control (RBAC) using middleware
-- Protected routes based on roles
-- Rate limiting for API protection
-
-## Financial Record Management
-
-- Full CRUD operations for financial records
-
-**Each record includes:**
-
-- Amount
-- Type (Income / Expense)
-- Category
-- Date
-- Notes
-
-**Additional capabilities:**
-
-- Pagination
-- Filtering
-- Search
-- Soft delete support
-
-## Financial Analytics
-
-**Summary Metrics:**
-
-- Total income
-- Total expenses
-- Net balance
-
-**Time-Based Analytics:**
-
-- Monthly
-- Quarterly
-- Yearly
-
-**Advanced Metrics:**
-
-- EBITDA
-- PAT (Profit After Tax)
-- Category-wise expense breakdown (sorted by highest spending)
-
-## Budget Tracking
-
-- Define budgets per category
-- Compare actual performance vs limit
-- Monitor category spending against budgets
-
-## Testing and Validation
-
-- Unit and integration testing using Jest and Supertest
-- API validation through Swagger
-- Proper status codes and error handling
-
-## Role-Based Access Control
-
-- Admin: Full access, manage users, CRUD operations
-- Analyst: View records and analytics
-- Viewer: Dashboard-only access
+---
 
 ## Project Structure
 
-```text
-.
-├── src/
-│   ├── controllers/        # Request/response logic
-│   ├── routes/             # API routes
-│   ├── services/           # Business logic (Prisma)
-│   ├── middleware/         # Auth, RBAC, rate limiting, errors
-│   ├── utils/              # Prisma client, JWT helpers
-│   └── config/             # Swagger and environment config
-├── prisma/
-│   ├── schema.prisma       # Database schema definition
-│   └── migrations/         # Version-controlled database migrations
-├── tests/                  # Unit and integration tests
-├── app.js                  # Express application configuration
-├── server.js               # Application entry point
-├── .env                    # Environment variables
-├── package.json
-├── package-lock.json
-├── API_Documentation.md
-└── README.md
+```
+Finance-Data-Processing-Access-Control/
+├── backend/
+│   ├── src/
+│   │   ├── controllers/        # Request/response logic
+│   │   │   ├── auth.controller.js
+│   │   │   ├── budget.controller.js
+│   │   │   ├── dashboard.controller.js
+│   │   │   ├── record.controller.js
+│   │   │   └── users.controller.js
+│   │   ├── middleware/         # Auth, RBAC, rate limiting
+│   │   │   ├── auth.middleware.js
+│   │   │   ├── rateLimit.js
+│   │   │   └── role.middleware.js
+│   │   ├── routes/             # API route definitions
+│   │   │   ├── auth.routes.js
+│   │   │   ├── budget.routes.js
+│   │   │   ├── dashboard.routes.js
+│   │   │   ├── record.routes.js
+│   │   │   └── users.routes.js
+│   │   ├── services/           # Business logic (Prisma + raw SQL)
+│   │   │   ├── dashboard.service.js
+│   │   │   └── record.service.js
+│   │   └── utils/              # Prisma client, JWT helpers
+│   │       ├── generateToken.js
+│   │       └── prisma.js
+│   ├── prisma/
+│   │   ├── schema.prisma       # Database schema
+│   │   ├── seed.cjs            # Database seeder
+│   │   └── migrations/         # Version-controlled migrations
+│   ├── tests/
+│   │   ├── auth.test.js
+│   │   └── basic.test.js
+│   ├── app.js                  # Express app + Swagger config
+│   ├── server.js               # Entry point
+│   ├── package.json
+│   ├── .env.example
+│   └── .env                    # Local env variables (gitignored)
+│
+├── frontend/
+│   ├── src/
+│   │   ├── pages/              # Route-level page components
+│   │   │   ├── LoginPage.jsx
+│   │   │   ├── RegisterPage.jsx
+│   │   │   ├── DashboardPage.jsx
+│   │   │   ├── RecordsPage.jsx
+│   │   │   ├── BudgetPage.jsx
+│   │   │   ├── UsersPage.jsx
+│   │   │   └── NotFoundPage.jsx
+│   │   ├── components/         # Reusable UI components
+│   │   │   └── Navbar.jsx
+│   │   ├── controllers/        # API integration layer
+│   │   │   ├── auth.controller.js
+│   │   │   ├── budget.controller.js
+│   │   │   ├── dashboard.controller.js
+│   │   │   └── record.controller.js
+│   │   ├── models/             # Data shape definitions
+│   │   │   ├── budget.model.js
+│   │   │   ├── record.model.js
+│   │   │   └── user.model.js
+│   │   ├── services/           # Auth and API services
+│   │   │   ├── api.service.js
+│   │   │   └── auth.service.js
+│   │   └── utils/
+│   │       └── authUtils.js
+│   ├── index.html
+│   ├── vite.config.js
+│   ├── package.json
+│   └── .env
+│
+├── package.json                # Root workspace config (npm workspaces)
+├── SETUP.md                    # Detailed setup and deployment guide
+├── API_Documentation.md        # Full API reference
+├── RESTRUCTURING_SUMMARY.md    # Monorepo migration notes
+└── .gitignore
 ```
 
-## Local Setup Instructions
+---
 
-1. Install dependencies:
+## Core Features
+
+### Authentication & Authorization
+- JWT-based secure authentication
+- bcrypt password hashing
+- Role-Based Access Control (RBAC) via middleware
+- Rate limiting on all API routes
+
+### Financial Record Management
+- Full CRUD for financial records (Admin only for write operations)
+- Each record: Amount, Type (Income/Expense), Category, Date, Notes
+- Pagination, filtering, search, and soft delete support
+
+### Financial Analytics
+- **Summary:** Total income, total expenses, net balance
+- **Time-based:** Monthly, quarterly, yearly breakdowns
+- **Advanced:** EBITDA, PAT (Profit After Tax, tax fixed at 10%), category-wise expense breakdown
+
+### Budget Tracking
+- Define per-category budgets
+- Compare actuals vs limits
+- Over-budget alerts
+
+### Frontend Dashboard
+- Login / Register pages with role selection
+- Dashboard with summary stats and recent transactions
+- Records management page
+- Budget page with category spend tracking
+- Users page (Admin only)
+- React Router v6 SPA navigation
+
+### Role-Based Access Control
+| Role | Permissions |
+|---|---|
+| **Admin** | Full access — manage users, CRUD records, set budgets |
+| **Analyst** | View records and analytics |
+| **Viewer** | Dashboard-only access |
+
+---
+
+## Local Setup
+
+### Prerequisites
+- Node.js ≥ 18
+- npm ≥ 9
+
+### Backend
 
 ```bash
+cd backend
 npm install
 ```
 
-2. Configure environment variables:
-
-Create a `.env` file:
+Create `backend/.env` (or copy from `.env.example`):
 
 ```env
 JWT_SECRET=your_secret_key
-DATABASE_URL="file:./prisma/dev.db"
+DATABASE_URL="file:./prisma/prisma/dev.db"
 ```
 
-3. Setup database:
+Run migrations and start:
 
 ```bash
-npx prisma generate
 npx prisma migrate dev
-```
-
-4. Run server:
-
-```bash
 npm start
+# → http://localhost:3000
+# → Swagger: http://localhost:3000/api-docs
 ```
 
-Application URL:
-
-- http://localhost:3000
-- Swagger Docs: http://localhost:3000/api-docs
-
-5. Run tests (optional):
+Seed sample data (optional):
 
 ```bash
-npm test
+npm run seed
 ```
 
-## Deployment Notes (Linux Environment)
+### Frontend
 
-- The project is hosted on Render.
-- Prisma is configured for Linux deploys.
-
-**Prisma fix:**
-
-```prisma
-binaryTargets = ["native", "debian-openssl-3.0.x"]
+```bash
+cd frontend
+npm install
 ```
 
-**Additional fixes:**
+Create `frontend/.env`:
 
-- Ensured Prisma client generation during deployment
-- Fixed schema path issues
-- Resolved case-sensitivity issues
-- Proper environment variable handling
+```env
+VITE_API_URL=http://localhost:3000
+```
+
+Start the dev server:
+
+```bash
+npm run dev
+# → http://localhost:5173
+```
+
+### Both (from root using workspaces)
+
+```bash
+# Terminal 1
+npm run backend:start
+
+# Terminal 2
+npm run frontend:dev
+```
+
+### Root workspace commands
+
+```bash
+npm run backend:start      # Start backend server
+npm run backend:test       # Run backend tests
+npm run frontend:dev       # Start frontend dev server
+npm run frontend:build     # Build frontend for production
+```
+
+---
 
 ## API Overview
 
-**Authentication**
+### Authentication
+| Method | Route | Access |
+|---|---|---|
+| POST | `/auth/register` | Public |
+| POST | `/auth/login` | Public |
 
-- POST /auth/register
-- POST /auth/login
+### Records
+| Method | Route | Access |
+|---|---|---|
+| GET | `/records` | Admin, Analyst |
+| POST | `/records` | Admin |
+| PUT | `/records/:id` | Admin |
+| DELETE | `/records/:id` | Admin |
 
-**Records**
+### Dashboard & Analytics
+| Method | Route | Access |
+|---|---|---|
+| GET | `/dashboard/summary` | All roles |
+| GET | `/dashboard/recent` | All roles |
+| GET | `/dashboard/category` | All roles |
+| GET | `/dashboard/finance/monthly` | Admin, Analyst |
+| GET | `/dashboard/finance/quarterly` | Admin, Analyst |
+| GET | `/dashboard/finance/yearly` | Admin, Analyst |
+| GET | `/dashboard/category-breakdown` | Admin, Analyst |
 
-- GET /records
-- POST /records (Admin only)
-- PUT /records/:id
-- DELETE /records/:id
+### Budget
+| Method | Route | Access |
+|---|---|---|
+| POST | `/budget` | Admin |
+| GET | `/budget/check` | Admin, Analyst |
 
-**Dashboard & Analytics**
+### Users
+| Method | Route | Access |
+|---|---|---|
+| GET | `/users` | Admin |
 
-- GET /dashboard/summary
-- GET /dashboard/recent
-- GET /dashboard/category
-- GET /dashboard/finance/monthly
-- GET /dashboard/finance/quarterly
-- GET /dashboard/finance/yearly
-- GET /dashboard/category-breakdown
+---
 
-**Budget**
+## Testing
 
-- POST /budget
-- GET /budget/check
+```bash
+cd backend
+npm test
+```
+
+Tests cover auth endpoints, RBAC enforcement, and core record operations using Jest + Supertest.
+
+---
 
 ## API Testing with Swagger
 
-**Workflow:**
+1. Open https://finance-data-processing-access-control-lxp4.onrender.com/api-docs
+2. Call `POST /auth/login` and copy the JWT token
+3. Click **Authorize** and paste the token
+4. Access any protected route
 
-- Call `/auth/login`
-- Copy JWT token
-- Click Authorize
-- Paste token
-- Access protected routes
+---
 
-**Validation includes:**
+## Deployment Notes
 
-- Correct responses
-- Status codes (200, 201, 401, 403)
-- RBAC enforcement
+### Backend — Render (Linux)
+
+Prisma schema includes Linux binary targets to avoid `PrismaClientInitializationError` on Render:
+
+```prisma
+binaryTargets = ["native", "debian-openssl-3.0.x", "debian-openssl-1.1.x"]
+```
+
+`postinstall` in `backend/package.json` auto-runs `prisma generate && prisma db push` on deploy.
+
+Set these environment variables in Render:
+- `JWT_SECRET`
+- `DATABASE_URL`
+
+### Frontend — Static Hosting (Vercel / Netlify)
+
+```bash
+cd frontend && npm run build
+```
+
+Set `VITE_API_URL` to your production backend URL before building.
+
+---
 
 ## Design Decisions
 
-- RBAC implemented using middleware
-- Prisma for structured database interaction
-- Raw SQL used for efficient analytics
-- Modular API structure
+- **Monorepo structure:** Backend and frontend are fully decoupled under `backend/` and `frontend/` with npm workspaces at the root for convenience.
+- **RBAC via middleware:** Clean, composable `role.middleware.js` applied per route — straightforward for this scale, easily extended.
+- **Raw SQL for analytics:** Used for aggregation queries (monthly/quarterly/yearly, EBITDA, PAT) where Prisma's query builder adds unnecessary overhead.
+- **SQLite for development:** Simple file-based setup; `DATABASE_URL` can be swapped for PostgreSQL/MySQL in production with no code changes.
+- **Swagger in `app.js`:** Kept centralized for simplicity; can be extracted to `src/config/swagger.js` for larger projects.
+- **Frontend MVC pattern:** Controllers handle API calls, models define data shapes, services manage auth state — keeps pages thin and logic reusable.
 
-## Assumptions
+---
 
-- Tax is fixed at 10% of profit
-- All expenses are treated as operating expenses
-- SQLite is used for simplicity
+## Tradeoffs
 
+| Decision | Reason | Limitation |
+|---|---|---|
+| SQLite | Fast setup, zero config | Not suitable for concurrent production load |
+| Fixed 10% tax rate | Keeps focus on backend architecture | Not a real accounting model |
+| Raw SQL for analytics | Better aggregation performance | Less portable across DB engines |
+| RBAC via middleware | Simple and composable | Less flexible than policy-based systems (e.g., CASL) |
+| Limited test coverage | Time constraints | Auth and core flow only; no analytics or budget tests yet |
 
-## Tradeoffs Considered
+---
 
-**SQLite over scalable databases**
+## Troubleshooting
 
-- Chosen for simplicity and quick setup, but not suitable for large-scale production.
+**`PrismaClientInitializationError` on Linux/Render**
+```bash
+cd backend && npx prisma generate
+```
 
-**Simplified financial calculations**
+**Frontend can't reach backend**
+- Confirm backend is on `http://localhost:3000`
+- Check `frontend/.env` has `VITE_API_URL=http://localhost:3000`
+- Restart the Vite dev server after changing `.env`
 
--Used basic assumptions (fixed tax rate) instead of full accounting models to keep focus on backend logic.
+**`permission denied` on prisma binary**
+```bash
+cd backend && chmod +x node_modules/.bin/prisma && npm install
+```
 
-**Raw SQL for analytics**
-
-- Improves performance for aggregations but reduces portability.
-
-**RBAC via middleware**
-
--Simple and easy to implement, though less flexible than advanced policy systems.
-
-**Swagger configuration inside app.js**
-
-- Swagger was implemented directly in app.js instead of a separate config file to keep the setup simple and centralized during development. For larger projects, this can be modularized into a dedicated config folder.
-**Environment variables handling**
-
-- The .env file was used for local development and was initially committed to the repository. While this is not a best practice, .gitignore was later added to prevent further exposure. This was done to demonstrate awareness of environment variable management, though in a real production setup secrets would be fully excluded.
-
-**Limited test coverage**
-
-- Focused mainly on authentication and core functionality due to time constraints.
-
-## Additional Notes
-
-- Environment variables are managed using a .env file. .gitignore is included to prevent sensitive data from being committed in future updates.
-- The backend is deployed on Render with adjustments for Linux compatibility (Prisma configuration and environment setup).
-- Swagger UI is integrated and used to test all APIs after deployment.
-- Key challenges handled during development include JWT authentication issues, Prisma runtime errors, request validation, and deployment debugging.
-
-
+---
 
 ## Conclusion
 
-- Clean backend architecture
-- Secure role-based access control
-- Financial analytics system
-- Real-world deployment handling
-
-This project reflects backend fundamentals such as API design, database management, and production-level considerations.
+This project demonstrates a production-aware full-stack setup — monorepo architecture, JWT + RBAC security, financial analytics with EBITDA/PAT calculations, and real deployment on Render. Both apps are independently deployable and the backend is database-agnostic by design.
