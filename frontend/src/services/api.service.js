@@ -1,10 +1,10 @@
-const DEV_PROXY_BASE = '/api';
-const PROD_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-
-const BASE_URL = import.meta.env.DEV ? DEV_PROXY_BASE : PROD_BASE;
+// In dev: Vite proxies /api/* to localhost:3000 (see vite.config.js)
+// In prod: VITE_API_URL must be set to the deployed backend URL
+const BASE_URL = import.meta.env.DEV
+  ? '/api'
+  : (import.meta.env.VITE_API_URL || 'https://finance-data-processing-access-control-lxp4.onrender.com');
 
 function buildUrl(path) {
-  // Ensure path starts with '/'
   const p = path.startsWith('/') ? path : `/${path}`;
   return `${BASE_URL}${p}`;
 }
@@ -27,7 +27,7 @@ export async function apiRequest(path, options = {}) {
   const payload = await response.json().catch(() => null);
 
   if (!response.ok) {
-    const message = payload?.error || payload?.message || 'Request failed';
+    const message = payload?.error || payload?.message || `Request failed: ${response.status}`;
     throw new Error(message);
   }
 

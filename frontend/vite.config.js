@@ -7,13 +7,17 @@ export default defineConfig({
     port: 5173,
     open: true,
     proxy: {
-      // Proxy /api requests to backend during development to avoid CORS/mixed-content
+      // In dev, /api/* → backend at localhost:3000 (strips /api prefix)
       '/api': {
-        target: process.env.VITE_API_URL || 'http://localhost:3000',
+        target: 'http://localhost:3000',
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, '')
       }
     }
+  },
+  build: {
+    outDir: 'dist',
+    sourcemap: false
   }
 });
